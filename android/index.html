@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Android - Popdeem Docs</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <link href="../css/custom.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+	
+	<script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="..">Popdeem Docs</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                    <li >
+                        <a href="../ios/">iOS</a>
+                    </li>
+                    <li class="active">
+                        <a href="./">Android</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="../ios/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a rel="prev" >
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#dependency">Dependency</a></li>
+            <li><a href="#initialise-sdk">Initialise SDK</a></li>
+            <li><a href="#permissions">Permissions</a></li>
+            <li><a href="#broadcast-features">Broadcast Features</a></li>
+            <li><a href="#initialise-popdeem-sdk">Initialise Popdeem SDK</a></li>
+            <li><a href="#for-applications-that-use-realm">For Applications that use Realm</a></li>
+        <li class="main "><a href="#facebook-app-setup">Facebook App Setup</a></li>
+        <li class="main "><a href="#twitter-app-setup">Twitter App Setup</a></li>
+            <li><a href="#note-for-fabric-users">NOTE: For Fabric users</a></li>
+        <li class="main "><a href="#instagram-app-setup">Instagram App Setup</a></li>
+        <li class="main "><a href="#login-flow">Login Flow</a></li>
+            <li><a href="#non-social-users">Non-Social Users</a></li>
+        <li class="main "><a href="#social-home">Social Home</a></li>
+            <li><a href="#activity-implementation">Activity Implementation</a></li>
+            <li><a href="#fragment-implementation">Fragment Implementation</a></li>
+        <li class="main "><a href="#strings">Strings</a></li>
+        <li class="main "><a href="#theme">Theme</a></li>
+            <li><a href="#images">Images</a></li>
+            <li><a href="#notification-icon">Notification Icon</a></li>
+            <li><a href="#social-login-header-image">Social Login Header Image</a></li>
+            <li><a href="#home-flow-banner-image">Home Flow Banner Image</a></li>
+        <li class="main "><a href="#colors">Colors</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="getting-started">Getting Started</h1>
+<h2 id="dependency">Dependency</h2>
+<p>The Popdeem Android SDK is available through jcenter and mavenCentral.
+Add the following line to the <code>dependencies</code> block of your applications <code>build.gradle</code> file and Gradle Sync your project to download the SDK dependency:</p>
+<pre><code class="java">compile 'com.popdeem.sdk:sdk:1.2.2'
+</code></pre>
+
+<p>To test against the staging environment append <code>-STAGING</code> to the dependency:</p>
+<pre><code class="java">compile 'com.popdeem.sdk:sdk:1.2.2-STAGING'
+</code></pre>
+
+<hr />
+<h4 id="note-for-projects-that-do-not-use-fabric">NOTE: For projects that do NOT use Fabric</h4>
+<p>The Popdeem SDK uses <a href="https://get.fabric.io/" title="Fabric">Fabric</a> for the official Twitter SDK but due to a limitation in Fabric regarding use in Android Libraries these steps will need to be taken. Fabric have stated that official support for this is upcoming.    <br />
+<em>If you already use Fabric in your application, these steps do not apply to you. You can skip to the Initialise SDK section below.</em></p>
+<p>If you do not use Fabric in your project you will need to add the following or you will get an error when syncing project files:</p>
+<p>In your <strong><em>top-level</em></strong> <code>build.gradle</code> file add the lines marked in the sample below:</p>
+<pre><code class="java">buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' } // Add this line
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'io.fabric.tools:gradle:1.+' // Add this line
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' } // Add this line
+    }
+}
+</code></pre>
+
+<p>Then in your <strong><em>application-level</em></strong> <code>build.gradle</code> file add the line marked below:</p>
+<pre><code class="java">apply plugin: 'com.android.application'
+apply plugin: 'io.fabric' // Add this line
+</code></pre>
+
+<hr />
+<h2 id="initialise-sdk">Initialise SDK</h2>
+<h4 id="api-key">API Key</h4>
+<p>Add your Popdeem API Key to your applications <code>AndroidManifest.xml</code>  inside the <code>&lt;application&gt;</code> tags:</p>
+<pre><code class="xml">&lt;meta-data
+    android:name=&quot;com.popdeem.sdk.ApiKey&quot;
+    android:value=&quot;YOUR_POPDEEM_API_KEY&quot; /&gt;
+</code></pre>
+
+<h2 id="permissions">Permissions</h2>
+<p>Add the following permissions to your applications <code>AndroidManifest.xml</code> if they are not already declared.</p>
+<pre><code class="xml">&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+&lt;uses-permission android:name=&quot;android.permission.ACCESS_FINE_LOCATION&quot; /&gt;
+&lt;uses-permission android:name=&quot;android.permission.ACCESS_COARSE_LOCATION&quot; /&gt;
+&lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot; /&gt;
+&lt;uses-permission android:name=&quot;android.permission.ACCESS_NETWORK_STATE&quot; /&gt;
+</code></pre>
+
+<h2 id="broadcast-features">Broadcast Features</h2>
+<p>To use the Popdeem Push Notification and Broadcast feature, your application must have GCM implemented.
+You can follow this <a href="https://developers.google.com/cloud-messaging/android/start" title="Android GCM">tutorial</a> to implement GCM in your application.</p>
+<p>Once you have implemented GCM, include the following:</p>
+<p>Add your Google App ID to your applications <code>strings.xml</code>.<br />
+<em>This can be found in your <a href="https://console.cloud.google.com/home/dashboard" title="Google Console">Google Console Dashboard</a> for your app under the <strong>Project Number</strong> heading.</em></p>
+<pre><code class="xml">&lt;string name=&quot;google_app_id&quot;&gt;YOUR_GOOGLE_APP_ID&lt;/string&gt;
+</code></pre>
+
+<p>Then reference this in your <code>AndroidManifest.xml</code> inside the <code>&lt;application&gt;</code> tags:</p>
+<pre><code class="xml">&lt;meta-data
+    android:name=&quot;GCMSenderID&quot;
+    android:value=&quot;@string/google_app_id&quot; /&gt;
+</code></pre>
+
+<p>Add the following <code>receiver</code> and <code>service</code> after the lines above:</p>
+<pre><code class="xml">&lt;receiver
+    android:name=&quot;com.popdeem.sdk.core.gcm.GCMBroadcastReceiver&quot;
+    android:exported=&quot;true&quot;
+    android:permission=&quot;com.google.android.c2dm.permission.SEND&quot;&gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name=&quot;com.google.android.c2dm.intent.RECEIVE&quot; /&gt;
+    &lt;/intent-filter&gt;
+&lt;/receiver&gt;
+
+&lt;service
+    android:name=&quot;com.popdeem.sdk.core.gcm.GCMIntentService&quot;
+    android:exported=&quot;true&quot; /&gt;
+</code></pre>
+
+<h2 id="initialise-popdeem-sdk">Initialise Popdeem SDK</h2>
+<p>To initialise the Popdeem SDK add the following line to your <code>Application</code> class:</p>
+<pre><code class="java">PopdeemSDK.initializeSDK(this);
+</code></pre>
+
+<h2 id="for-applications-that-use-realm">For Applications that use Realm</h2>
+<p>If your application uses <a href="https://realm.io/">Realm</a> you will need to add the Popdeem SDK's schema to your Realm Configuration. You can read about this <a href="https://realm.io/docs/java/latest/#schemas">here</a> in the Realm documentation.</p>
+<p>The Popdeem SDK's Realm Module class is <code>PDRealmModule</code>. A sample RealmConfiguration might look like this when including Popdeem's Realm Module:</p>
+<pre><code class="java">RealmConfiguration config = new RealmConfiguration.Builder(this)
+        .schemaVersion(1)
+        .modules(Realm.getDefaultModule(), new PDRealmModule())
+        .name(&quot;yourdbname.realm&quot;)
+        .build();
+Realm.setDefaultConfiguration(config);
+</code></pre>
+
+<hr />
+<h1 id="facebook-app-setup">Facebook App Setup</h1>
+<p>You will need to set up a Facebook application at the Facebook Dev Centre. You can do so by following this <a href="https://developers.facebook.com/docs/apps/register" title="Facebook Tutorial">Tutorial</a>.</p>
+<p>Popdeem SDK already includes the Facebook SDK dependency <em>(v4.5.0)</em> so your application will inherit this.</p>
+<hr />
+<p>When you have created your Facebook Application, you will need to set up some custom Open Graph Objects in order to use Popdeem correctly. You will need two objects:</p>
+<ul>
+<li>Brand Location, which inherits from <strong>Place</strong> and has an attribute <strong>Geopoints</strong>  </li>
+<li>Photo, which inherits from <strong>Photo</strong></li>
+</ul>
+<p>You then need to create <em>two</em> Open Graph stories using these objects:</p>
+<ul>
+<li><strong>Check in</strong> at <strong>Brand Location</strong>. This has action type <strong>Check In</strong>, object type <strong>Brand Location</strong> and uses the <strong>Map</strong> attachments, with <strong>brand_location.geopoints</strong> highlighted.</li>
+<li><strong>Share</strong> a <strong>Photo</strong>. This has action type <strong>Share</strong>, and object type <strong>Photo</strong>.</li>
+</ul>
+<hr />
+<p>When you have your Facebook app set up, make note of your Facebook App ID. Add the following to your Android applications <code>string.xml</code> file:</p>
+<pre><code class="xml">&lt;string name=&quot;facebook_app_id&quot;&gt;YOUR_FACEBOOK_APP_ID&lt;/string&gt;
+</code></pre>
+
+<p>Then in your <code>AndroidManifest.xml</code> file add these lines inside the <code>&lt;application&gt;</code> tags:</p>
+<pre><code class="xml">&lt;meta-data
+    android:name=&quot;com.facebook.sdk.ApplicationId&quot;
+    android:value=&quot;@string/facebook_app_id&quot; /&gt;
+
+&lt;activity
+    android:name=&quot;com.facebook.FacebookActivity&quot;
+    android:configChanges=&quot;keyboard|keyboardHidden|screenLayout|screenSize|orientation&quot;
+    android:label=&quot;@string/app_name&quot;
+    android:theme=&quot;@android:style/Theme.Translucent.NoTitleBar&quot; /&gt;
+</code></pre>
+
+<hr />
+<h1 id="twitter-app-setup">Twitter App Setup</h1>
+<p>If you do not have a Twitter app and the corresponding consumer secret and consumer key you can create an app <a href="https://apps.twitter.com/" title="Twitter Apps">here</a> and generate the keys needed to continue.</p>
+<p>Once you have the Twitter app consumer key and consumer secret add the following lines to your <code>AndroidMainfest.xml</code> inside the <code>&lt;application&gt;</code> tags:</p>
+<pre><code class="xml">&lt;meta-data
+    android:name=&quot;TwitterConsumerKey&quot;
+    android:value=&quot;YOUR_TWITTER_CONSUMER_KEY&quot; /&gt;
+
+&lt;meta-data
+    android:name=&quot;TwitterConsumerSecret&quot;
+    android:value=&quot;YOUR_TWITTER_CONSUMER_SECRET&quot; /&gt;
+</code></pre>
+
+<hr />
+<h4 id="note-for-fabric-users">NOTE: For Fabric users</h4>
+<p>If you are using <a href="https://get.fabric.io/" title="Fabric">Fabric</a> you will need to update the Fabric initialization in your <code>Application</code> class.    <br />
+This is due to a limitation in Fabric with Android libraries.</p>
+<p>The Popdeem SDK provides a method to create the Twitter kit using the consumers keys added to the <code>AndroidManifest.xml</code> in the previous step.</p>
+<p>If you are already using the a Twitter kit with Fabric you will need to replace it in your Fabric init with this method.    <br />
+If you are not using the Twitter kit already you just need to add this method to the list of kits in your Fabric init.</p>
+<pre><code class="java">Fabric.with(this, PDSocialUtils.getTwitterKitForFabric(this));
+</code></pre>
+
+<p><strong><em>Fabric should be initialized BEFORE initializing the Popdeem SDK</em></strong></p>
+<hr />
+<h1 id="instagram-app-setup">Instagram App Setup</h1>
+<p>If you do not have an Instagram app and the corresponding Client ID and Secret you can create one <a href="https://www.instagram.com/developer/clients/register/">here</a> and generate the keys needed to continue.</p>
+<p>Once you have the Client ID and Secret for your Instagram app, add the following lines to your <code>AndroidManifest.xml</code> inside the <code>&lt;application&gt;</code> tags:</p>
+<pre><code class="xml">&lt;meta-data
+    android:name=&quot;InstagramClientId&quot;
+    android:value=&quot;YOUR_INSTAGRAM_CLIENT_ID&quot; /&gt;
+
+&lt;meta-data
+    android:name=&quot;InstagramClientSecret&quot;
+    android:value=&quot;YOUR_INSTAGRAM_CLIENT_SECRET&quot; /&gt;
+
+&lt;meta-data
+    android:name=&quot;InstagramCallbackUrl&quot;
+    android:value=&quot;YOUR_INSTAGRAM_CLIENT_CALLBACK_URL&quot; /&gt;
+</code></pre>
+
+<hr />
+<h1 id="login-flow">Login Flow</h1>
+<p>To trigger the Popdeem login flow, call the <code>enableSocialLogin(@NonNull Class activityClass, int numberOfPrompts)</code> method of the <code>PopdeemSDK</code> class:</p>
+<pre><code class="java">PopdeemSDK.enableSocialLogin(MainActivity.class, 3);
+</code></pre>
+
+<p>The <code>activityClass</code> parameter denotes the Activity class that you would like the login flow to appear in. In the example above we want the login flow to appear in the applications <code>MainActivity</code> so we pass <code>MainActivity.class</code> in method.</p>
+<p>The <code>numberOfPrompts</code> parameter denotes how many times you wish to ask the user to log in if they have dismissed the login pop-up.</p>
+<p>Provided all of the items in <a href="facebook_app_setup.md" title="Facebook Setup">Facebook App Setup</a> have been performed correctly, this login flow will result in the user being logged in.</p>
+<p>On app launch, if the user has been previously logged in, the Popdeem SDK will take care of automatic login.</p>
+<h2 id="non-social-users">Non-Social Users</h2>
+<p>When you initialize the Popdeem SDK, a non-social user is created and registered on Popdeem. This allows you to track which of your app users have converted to Social.  </p>
+<hr />
+<h1 id="social-home">Social Home</h1>
+<p>All of Popdeem's core mobile features are contained in the <code>Home</code> flow. There are various scenarios in which you may launch the Home flow.</p>
+<h2 id="activity-implementation">Activity Implementation</h2>
+<p>The recommended way to present the Home flow is to use the standalone activity provided in the Popdeem SDK. To start this activity use one of the following lines of code depending on the type of class the call will be invoked from:</p>
+<p>From an Activity:</p>
+<pre><code class="java">PopdeemSDK.showHomeFlow(this);
+</code></pre>
+
+<p>From an Fragment:</p>
+<pre><code class="java">PopdeemSDK.showHomeFlow(getActivity());
+</code></pre>
+
+<p>An example of this can be seen in the <code>navigationsample</code> module in the <code>MainActivity</code> class.</p>
+<h2 id="fragment-implementation">Fragment Implementation</h2>
+<p>If you wanted to present the Home flow as a fragment instead, for example as a Tab in a <code>TabLayout</code> <code>ViewPager</code>, create an instance of the <code>PDUIHomeFlowFragment</code> Fragment class using the following:</p>
+<pre><code class="java">PDUIHomeFlowFragment.newInstance();
+</code></pre>
+
+<p>This can be used in your <code>PagerAdapter</code> or in a <code>FragmentTransaction</code> depending on your requirements.</p>
+<p>An example of this can be seen in the <code>tabbedsample</code> module in the <code>MainActivity</code> class.</p>
+<hr />
+<p>To customize the look and feel of the Popdeem SDK, check out the <a href="theme.md" title="Theme">theming</a> section.  </p>
+<hr />
+<h1 id="strings">Strings</h1>
+<p>Customizing Strings in the Popdeem SDK is similar to customizing colors.</p>
+<p>You can customize the Popdeem SDK's UI strings to help with integration.</p>
+<p>All you need to do it declare the string in your applications <code>strings.xml</code> file.</p>
+<p><em>The strings must be named the same as they appear below</em></p>
+<p>The list of strings that can be changed are as follows:</p>
+<pre><code class="xml">&lt;!-- Common --&gt;
+&lt;string name=&quot;pd_common_please_wait_text&quot;&gt;Please wait&lt;/string&gt;
+&lt;string name=&quot;pd_common_sorry_text&quot;&gt;Sorry&lt;/string&gt;
+&lt;string name=&quot;pd_common_something_wrong_text&quot;&gt;Something went wrong. Please try again later.&lt;/string&gt;
+&lt;string name=&quot;pd_common_logout_text&quot;&gt;Logout&lt;/string&gt;
+&lt;string name=&quot;pd_common_logout_message_text&quot;&gt;Are you sure you want to log out?&lt;/string&gt;
+&lt;string name=&quot;pd_common_facebook_login_cancelled_title_text&quot;&gt;Login Cancelled&lt;/string&gt;
+&lt;string name=&quot;pd_common_facebook_login_cancelled_message_text&quot;&gt;You may browse the app before connecting your Facebook, but you must log in with Facebook to avail of social rewards.&lt;/string&gt;
+
+
+&lt;!-- Social Login --&gt;
+&lt;string name=&quot;pd_social_login_success_text&quot;&gt;Connected!&lt;/string&gt;
+&lt;string name=&quot;pd_social_login_success_description_text&quot;&gt;Rewards are now unlocked. You will be notified when new rewards are available.&lt;/string&gt;
+&lt;string name=&quot;pd_social_login_heading_text&quot;&gt;Connect your Facebook to earn additional Rewards&lt;/string&gt;
+&lt;string name=&quot;pd_social_login_body_text&quot;&gt;Connect your Facebook account to turn social features on. This will give you access to exclusive content and new social rewards.&lt;/string&gt;
+&lt;string name=&quot;pd_social_login_footer_text&quot;&gt;Powered by Popdeem&lt;/string&gt;
+&lt;string name=&quot;pd_social_login_continue_text&quot;&gt;Continue to app&lt;/string&gt;
+&lt;string name=&quot;pd_social_login_tagline_text&quot;&gt;NEW: SOCIAL FEATURES&lt;/string&gt;
+&lt;string name=&quot;pd_social_login_terms_text&quot;&gt;By signing in with Facebook you accept the terms of our privacy policy.&lt;/string&gt;
+
+
+&lt;!-- Home Flow --&gt;
+&lt;string name=&quot;pd_home_banner_text&quot;&gt;Share your Popdeem experience on social networks to earn more rewards.&lt;/string&gt;
+
+
+&lt;!-- Rewards --&gt;
+&lt;string name=&quot;pd_rewards_not_available_text&quot;&gt;There are no rewards available right now. Please check back later.&lt;/string&gt;
+
+
+&lt;!-- Tab Titles --&gt;
+&lt;string name=&quot;pd_rewards_title&quot;&gt;Rewards&lt;/string&gt;
+&lt;string name=&quot;pd_activity_title&quot;&gt;Activity&lt;/string&gt;
+&lt;string name=&quot;pd_wallet_title&quot;&gt;Wallet&lt;/string&gt;
+
+
+&lt;!-- Claim --&gt;
+&lt;string name=&quot;pd_claim_title&quot;&gt;Claim&lt;/string&gt;
+&lt;string name=&quot;pd_claim_get_reward_text&quot;&gt;Share and Redeem&lt;/string&gt;
+&lt;string name=&quot;pd_claim_verify_location_failed_title_text&quot;&gt;Not at location&lt;/string&gt;
+&lt;string name=&quot;pd_claim_verify_location_failed_text&quot;&gt;You must be at this location to claim this reward.\nPlease come back later.&lt;/string&gt;
+
+&lt;string name=&quot;pd_claim_message_placeholder_text&quot;&gt;What are you up to?&lt;/string&gt;
+
+&lt;string name=&quot;pd_claim_cannot_deselect_text&quot;&gt;Cannot Deselect&lt;/string&gt;
+&lt;string name=&quot;pd_claim_facebook_forced_message_string&quot;&gt;This reward must be claimed with a Facebook post. You can also post to Twitter if you wish.&lt;/string&gt;
+&lt;string name=&quot;pd_claim_twitter_forced_message_string&quot;&gt;This reward must be claimed with a Twitter post. You can also post to Facebook if you wish.&lt;/string&gt;
+
+&lt;string name=&quot;pd_claim_reward_claimed_text&quot;&gt;Reward Claimed!&lt;/string&gt;
+&lt;string name=&quot;pd_claim_reward_claimed_success_text&quot;&gt;You can view your reward in your wallet&lt;/string&gt;
+&lt;string name=&quot;pd_claim_claiming_reward_text&quot;&gt;Claiming your reward&lt;/string&gt;
+&lt;string name=&quot;pd_claim_tweet_too_long_text&quot;&gt;You are over the character limit for Twitter. Please edit your message.&lt;/string&gt;
+&lt;string name=&quot;pd_claim_no_network_selected_title_text&quot;&gt;No Network Selected&lt;/string&gt;
+&lt;string name=&quot;pd_claim_no_network_selected_message_text&quot;&gt;You must select at least one social network in order to complete this action&lt;/string&gt;
+&lt;string name=&quot;pd_claim_photo_required_text&quot;&gt;Photo Required&lt;/string&gt;
+&lt;string name=&quot;pd_claim_photo_required_message_text&quot;&gt;A photo is required for this action. Please add a photo&lt;/string&gt;
+
+&lt;string name=&quot;pd_claim_action_tweet_checkin&quot;&gt;Check-in or Tweet Required&lt;/string&gt;
+&lt;string name=&quot;pd_claim_action_photo&quot;&gt;Photo required&lt;/string&gt;
+&lt;string name=&quot;pd_claim_action_none&quot;&gt;Instant Coupon&lt;/string&gt;
+&lt;string name=&quot;pd_claim_action_checkin&quot;&gt;Check-in Required&lt;/string&gt;
+&lt;string name=&quot;pd_claim_action_tweet&quot;&gt;Tweet Required&lt;/string&gt;
+&lt;string name=&quot;pd_claim_action_tweet_photo&quot;&gt;Tweet with Photo Required&lt;/string&gt;
+
+&lt;!-- Claim Add Image Dialog --&gt;
+&lt;string name=&quot;pd_claim_add_photo_title_text&quot;&gt;Add Photo&lt;/string&gt;
+&lt;string name=&quot;pd_claim_add_photo_gallery_text&quot;&gt;Gallery&lt;/string&gt;
+&lt;string name=&quot;pd_claim_add_photo_camera_text&quot;&gt;Camera&lt;/string&gt;
+
+&lt;!-- Claim Tag Friends --&gt;
+&lt;string name=&quot;pd_claim_choose_friends_title&quot;&gt;Choose Friends&lt;/string&gt;
+&lt;string name=&quot;pd_claim_choose_friends_search_text&quot;&gt;Search&lt;/string&gt;
+
+
+&lt;!-- Inbox --&gt;
+&lt;string name=&quot;pd_inbox_title&quot;&gt;Inbox&lt;/string&gt;
+&lt;string name=&quot;pd_inbox_message_sender_tag_text&quot;&gt;Sender:&lt;/string&gt;
+&lt;string name=&quot;pd_inbox_message_date_tag_text&quot;&gt;Date:&lt;/string&gt;
+&lt;string name=&quot;pd_inbox_message_body_tag_text&quot;&gt;Body:&lt;/string&gt;
+&lt;string name=&quot;pd_inbox_message_title_tag_text&quot;&gt;Title:&lt;/string&gt;
+&lt;string name=&quot;pd_inbox_no_messages_text&quot;&gt;You have no message right now…&lt;/string&gt;
+
+
+&lt;!-- Wallet --&gt;
+&lt;string name=&quot;pd_wallet_no_items_text&quot;&gt;You have no items in your Wallet right now.&lt;/string&gt;
+&lt;string name=&quot;pd_wallet_sweepstake_redeem_text&quot;&gt;You will be notified if you are the winner.&lt;/string&gt;
+&lt;string name=&quot;pd_wallet_credit_reward_text&quot;&gt;was added to your balance.&lt;/string&gt;
+&lt;string name=&quot;pd_wallet_coupon_info_message_text&quot;&gt;- Once you\'re ready to redeem your reward, tap \&quot;Redeem\&quot;.\n\n- After tapping \&quot;Redeem\&quot; you have %1$s minutes to get the reward.\n\n- You must show the cashier the following screen within %2$s minutes.&lt;/string&gt;
+&lt;string name=&quot;pd_redeem_sweepstake_reward_info_title_string&quot;&gt;Sweepstake Reward&lt;/string&gt;
+&lt;string name=&quot;pd_redeem_sweepstake_reward_info_message_string&quot;&gt;- You are now in the draw.\n\n- You will be notified if you are the winner.&lt;/string&gt;
+&lt;string name=&quot;pd_redeem_sweepstake_reward_no_date_message_string&quot;&gt;\n\n- There is no date set for this draw.&lt;/string&gt;
+&lt;string name=&quot;pd_draw_takes_place_in_string&quot;&gt;Draw takes place in&lt;/string&gt;
+
+
+&lt;!-- Feed --&gt;
+&lt;string name=&quot;pd_feed_no_items_text&quot;&gt;There is no Feed available right now. Please check back later.&lt;/string&gt;
+
+
+&lt;!-- Redeem --&gt;
+&lt;string name=&quot;pd_redeem_title&quot;&gt;Redeem&lt;/string&gt;
+&lt;string name=&quot;pd_redeem_done_alert_title_text&quot;&gt;Have you redeemed your reward?&lt;/string&gt;
+&lt;string name=&quot;pd_redeem_done_alert_body_text&quot;&gt;You will not be able to redeem your reward after leaving this screen&lt;/string&gt;
+&lt;string name=&quot;pd_redeem_timer_finished_text&quot;&gt;Timer Finished&lt;/string&gt;
+
+&lt;string name=&quot;pd_are_you_sure_string&quot;&gt;Are you sure?&lt;/string&gt;
+&lt;string name=&quot;pd_redeem_button_string&quot;&gt;Redeem&lt;/string&gt;
+&lt;string name=&quot;pd_redeem_reward_info_title_string&quot;&gt;How to Redeem&lt;/string&gt;
+
+&lt;string name=&quot;pd_redeem_info_text&quot;&gt;Share this screen at the location\nbefore the timer runs out&lt;/string&gt;
+&lt;string name=&quot;pd_redeem_done_text&quot;&gt;Done&lt;/string&gt;
+
+
+&lt;!-- Notification Dialog --&gt;
+&lt;string name=&quot;pd_notification_go_button_text&quot;&gt;GO&lt;/string&gt;
+
+
+&lt;!-- Location Permissions --&gt;
+&lt;string name=&quot;pd_location_disabled_title_text&quot;&gt;Location Disabled&lt;/string&gt;
+&lt;string name=&quot;pd_location_disabled_message_text&quot;&gt;Location Services need to be enabled to continue. We use your location to deliver local rewards. Would you like to be taken Location Settings?&lt;/string&gt;
+&lt;string name=&quot;pd_location_permission_title_text&quot;&gt;Locations Permission&lt;/string&gt;
+&lt;string name=&quot;pd_location_permission_rationale_text&quot;&gt;We use your location to deliver local rewards&lt;/string&gt;
+&lt;string name=&quot;pd_location_permission_are_you_sure_text&quot;&gt;We use your location to deliver local rewards. Would you like to give permission to access your location?&lt;/string&gt;
+
+
+&lt;!-- Storage Permissions --&gt;
+&lt;string name=&quot;pd_storage_permissions_title_string&quot;&gt;Storage Permissions&lt;/string&gt;
+&lt;string name=&quot;pd_storage_permission_rationale_string&quot;&gt;We need permission to save the image you take to your phone. Would you like to give permission?&lt;/string&gt;
+&lt;string name=&quot;pd_storage_permissions_denied_string&quot;&gt;This app needs access to your storage to share an image.&lt;/string&gt;
+
+
+&lt;!-- Suspended Account --&gt;
+&lt;string name=&quot;pd_suspended_title_string&quot;&gt;Suspended&lt;/string&gt;
+&lt;string name=&quot;pd_suspended_message_string&quot;&gt;You have been suspended. You cannot claim any rewards at this time.&lt;/string&gt;
+&lt;string name=&quot;pd_suspended_message_with_date_string&quot;&gt;You have been suspended. Your account will become active on %1s&lt;/string&gt;
+</code></pre>
+
+<hr />
+<h1 id="theme">Theme</h1>
+<h2 id="images">Images</h2>
+<p>There are a few images that you can override to suit your application.</p>
+<h2 id="notification-icon">Notification Icon</h2>
+<p>To customize the notification icon that is shown when your app receives a push notification from Popdeem add an image to your drawable folders with this name:</p>
+<pre><code>ic_pd_notification.png
+</code></pre>
+
+<p><em>We recommend using the built in Image Asset creator in Android Studio to do this as it will add an image for all densities.</em> <br />
+<em>To do this use File -&gt; New -&gt; Image Asset and choose "Notification Icons"</em></p>
+<h2 id="social-login-header-image">Social Login Header Image</h2>
+<p>To customize the header image shown in the Social Login view add an image to your drawable folders called:</p>
+<pre><code>pd_social_login_header.png
+</code></pre>
+
+<h2 id="home-flow-banner-image">Home Flow Banner Image</h2>
+<p>To customize the header / banner image shown in the Home Flow, add an image to your drawable folders called:</p>
+<pre><code>pd_home_banner.png
+</code></pre>
+
+<hr />
+<h1 id="colors">Colors</h1>
+<p>You can customize the Popdeem SDK's UI colors to help with integration.</p>
+<p>All you need to do it declare the color in your applications <code>colors.xml</code> file.</p>
+<p><em>The colors must be named the same as they appear below</em></p>
+<p>The list of colors that can be changed are as follows:</p>
+<pre><code class="xml">&lt;!-- Toolbar Colors --&gt;
+&lt;color name=&quot;pd_toolbar_color&quot;&gt;#da4d59&lt;/color&gt;
+&lt;color name=&quot;pd_toolbar_color_dark&quot;&gt;#cc4752&lt;/color&gt;
+&lt;color name=&quot;pd_toolbar_text_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_accent&quot;&gt;#dba7ac&lt;/color&gt;
+&lt;color name=&quot;pd_back_button_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;!-- Can be used if your social login header image clashes with the back button color for the rest of your app. Otherwise it defaults to pd_back_button_color --&gt;
+&lt;color name=&quot;pd_social_login_back_button_color&quot;&gt;@color/pd_back_button_color&lt;/color&gt;
+
+
+&lt;!-- Inbox Floating Action Button Colors --&gt;
+&lt;color name=&quot;pd_inbox_button_bg_color&quot;&gt;#da4d59&lt;/color&gt;
+&lt;color name=&quot;pd_inbox_button_icon_color&quot;&gt;#ffffff&lt;/color&gt;
+
+
+&lt;!-- TabLayout Colors --&gt;
+&lt;color name=&quot;pd_tab_background_color&quot;&gt;#da4d59&lt;/color&gt;
+&lt;color name=&quot;pd_tab_selected_text_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_tab_unselected_text_color&quot;&gt;#aaaaaa&lt;/color&gt;
+&lt;color name=&quot;pd_tab_indicator_color&quot;&gt;#dba7ac&lt;/color&gt;
+
+
+&lt;!-- Home Flow --&gt;
+&lt;color name=&quot;pd_home_flow_banner_text_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_home_flow_banner_bg_color&quot;&gt;#da4d59&lt;/color&gt;
+
+
+&lt;!-- Inbox / Message Center Colors --&gt;
+&lt;color name=&quot;pd_inbox_background_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_inbox_no_messages_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;!-- Inbox List Item Colors --&gt;
+&lt;color name=&quot;pd_inbox_list_divider_color&quot;&gt;#dba7ac&lt;/color&gt;
+&lt;color name=&quot;pd_inbox_list_item_background_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_inbox_list_item_body_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_inbox_list_item_time_text_color&quot;&gt;#A2A2A1&lt;/color&gt;
+&lt;color name=&quot;pd_inbox_list_item_unread_indicator_color&quot;&gt;#2b85d3&lt;/color&gt;
+
+
+&lt;!-- Social Login Colors --&gt;
+&lt;color name=&quot;pd_login_continue_button_background_color&quot;&gt;#3c9915&lt;/color&gt;
+&lt;color name=&quot;pd_login_continue_button_text_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_login_tagline_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_login_heading_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_login_body_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_login_terms_text_color&quot;&gt;#000000&lt;/color&gt;
+
+
+&lt;!-- Rewards Colors --&gt;
+&lt;color name=&quot;pd_rewards_background_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_rewards_no_rewards_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;!-- Rewards List Item Colors --&gt;
+&lt;color name=&quot;pd_reward_list_divider_color&quot;&gt;#dba7ac&lt;/color&gt;
+&lt;color name=&quot;pd_reward_list_background_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_reward_list_item_title_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_reward_list_item_subtitle_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_reward_list_item_info_text_color&quot;&gt;#A2A2A1&lt;/color&gt;
+
+
+&lt;!-- Feed List Item Colors --&gt;
+&lt;color name=&quot;pd_feed_background&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_feed_no_feed_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_feed_list_background_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_feed_list_divider_color&quot;&gt;#dba7ac&lt;/color&gt;
+&lt;color name=&quot;pd_feed_item_default_text_color&quot;&gt;#A2A2A1&lt;/color&gt;
+&lt;color name=&quot;pd_feed_item_name_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_feed_item_comment_text_color&quot;&gt;#888888&lt;/color&gt;
+&lt;color name=&quot;pd_feed_item_time_text_color&quot;&gt;#A2A2A1&lt;/color&gt;
+&lt;color name=&quot;pd_feed_item_title_text_color&quot;&gt;#da4d59&lt;/color&gt;
+
+
+&lt;!-- Wallet List Item Colors --&gt;
+&lt;color name=&quot;pd_wallet_background_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_wallet_no_rewards_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_wallet_item_background_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_wallet_list_divider_color&quot;&gt;#dba7ac&lt;/color&gt;
+&lt;color name=&quot;pd_wallet_item_default_text_color&quot;&gt;#000000&lt;/color&gt;
+
+
+&lt;!-- Redeem Colors --&gt;
+&lt;color name=&quot;pd_redeem_background_colour&quot;&gt;#dddddd&lt;/color&gt;
+&lt;color name=&quot;pd_redeem_content_background_colour&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_redeem_content_border_colour&quot;&gt;#aaaaaa&lt;/color&gt;
+&lt;color name=&quot;pd_redeem_done_button_background_colour&quot;&gt;#da4d59&lt;/color&gt;
+&lt;color name=&quot;pd_redeem_done_button_text_colour&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_redeem_timer_text_colour&quot;&gt;#da4d59&lt;/color&gt;
+&lt;color name=&quot;pd_redeem_title_text_colour&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_redeem_description_text_colour&quot;&gt;#000000&lt;/color&gt;
+
+
+&lt;!-- Claim Colors --&gt;
+&lt;color name=&quot;pd_claim_background_color&quot;&gt;#dddddd&lt;/color&gt;
+&lt;color name=&quot;pd_claim_over_character_limit_text_color&quot;&gt;#ff0000&lt;/color&gt;
+&lt;color name=&quot;pd_claim_share_button_background_color&quot;&gt;#3b5999&lt;/color&gt;
+&lt;color name=&quot;pd_claim_share_button_text_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_claim_tagged_friends_text_color&quot;&gt;#da4d59&lt;/color&gt;
+&lt;color name=&quot;pd_claim_location_verification_background_color&quot;&gt;#d8d8d8&lt;/color&gt;
+&lt;color name=&quot;pd_claim_location_verification_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_claim_location_verification_tick_color&quot;&gt;#777777&lt;/color&gt;
+
+&lt;color name=&quot;pd_tag_friends_background_color&quot;&gt;#ffffff&lt;/color&gt;
+
+&lt;color name=&quot;pd_tagged_friends_text_color&quot;&gt;#ffffff&lt;/color&gt;
+&lt;color name=&quot;pd_tagged_friends_color&quot;&gt;#3DA8F2&lt;/color&gt;
+&lt;color name=&quot;pd_tagged_friends_color_pressed&quot;&gt;#ff2d7db5&lt;/color&gt;
+
+
+&lt;!-- Horizontal Progress Colors --&gt;
+&lt;color name=&quot;pd_horizontal_progress_color&quot;&gt;#bb4f53&lt;/color&gt;
+&lt;color name=&quot;pd_horizontal_progress_background_color&quot;&gt;#dba7ac&lt;/color&gt;
+
+
+&lt;!-- Notification Dialog Colors --&gt;
+&lt;color name=&quot;pd_notification_dialog_title_text_color&quot;&gt;#000000&lt;/color&gt;
+&lt;color name=&quot;pd_notification_dialog_message_text_color&quot;&gt;#000000&lt;/color&gt;
+
+
+&lt;!-- Swipe Refresh Colors. Should contain between 1...n colors. --&gt;
+&lt;!-- If an empty array is provided the swipe refresh color defaults to pd_toolbar_color --&gt;
+&lt;array name=&quot;pd_swipe_refresh_colors_array&quot;&gt;
+    &lt;item&gt;@color/pd_rainbow_color_1&lt;/item&gt;
+    &lt;item&gt;@color/pd_rainbow_color_2&lt;/item&gt;
+    &lt;item&gt;@color/pd_rainbow_color_3&lt;/item&gt;
+    &lt;item&gt;@color/pd_rainbow_color_4&lt;/item&gt;
+&lt;/array&gt;
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2017 <a href="https://www.popdeem.com">Popdeem</a></p>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
