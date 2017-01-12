@@ -2,13 +2,13 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Welcome to Popdeem Docs", 
+            "text": "iOS\n\n\nAndroid\n\n\n\n\n\n\n\n\n\n\n   \n \n\n\n \n \n\n\n\n\n\n\n\n\n\n\nTurn Customers into Brand Advocates\n\n\nPopdeem is a social loyalty program that makes it easy for brands to generate word of mouth marketing and drive customer engagement on social networks.", 
             "title": "Home"
         }, 
         {
-            "location": "/#welcome-to-popdeem-docs", 
-            "text": "", 
-            "title": "Welcome to Popdeem Docs"
+            "location": "/#turn-customers-into-brand-advocates", 
+            "text": "Popdeem is a social loyalty program that makes it easy for brands to generate word of mouth marketing and drive customer engagement on social networks.", 
+            "title": "Turn Customers into Brand Advocates"
         }, 
         {
             "location": "/ios/getting-started/", 
