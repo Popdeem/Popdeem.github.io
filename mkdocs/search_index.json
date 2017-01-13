@@ -2,18 +2,13 @@
     "docs": [
         {
             "location": "/", 
-            "text": "iOS\n\n\nAndroid\n\n\n\n\n\n\n\n\n\n\n   \n \n\n\n \n \n\n\n\n\n\n\n\n\n\n\nDeveloper Documentation\n\n\nTurn Customers into Brand Advocates\n\n\nPopdeem is a social loyalty program that makes it easy for brands to generate word of mouth marketing and drive customer engagement on social networks.", 
+            "text": "Welcome to the Popdeem SDK Developer Docs\n\n\nWe have mobile SDKs for iOS and Android. Integrate Popdeem into your mobile app today! Our integration is simple and fast - you can be up and running in under 30 minutes. If you are already a Popdeem cutomer, take a look through our \niOS\n and \nAndroid\n docs to get started. If you are new - \nRequest a Demo\n to see what we can do.\n\n\n\n\n\n\n\n\niOS\n\n\nAndroid", 
             "title": "Home"
         }, 
         {
-            "location": "/#developer-documentation", 
-            "text": "", 
-            "title": "Developer Documentation"
-        }, 
-        {
-            "location": "/#turn-customers-into-brand-advocates", 
-            "text": "Popdeem is a social loyalty program that makes it easy for brands to generate word of mouth marketing and drive customer engagement on social networks.", 
-            "title": "Turn Customers into Brand Advocates"
+            "location": "/#welcome-to-the-popdeem-sdk-developer-docs", 
+            "text": "We have mobile SDKs for iOS and Android. Integrate Popdeem into your mobile app today! Our integration is simple and fast - you can be up and running in under 30 minutes. If you are already a Popdeem cutomer, take a look through our  iOS  and  Android  docs to get started. If you are new -  Request a Demo  to see what we can do.     iOS  Android", 
+            "title": "Welcome to the Popdeem SDK Developer Docs"
         }, 
         {
             "location": "/ios/", 
